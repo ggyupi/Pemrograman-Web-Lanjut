@@ -8,6 +8,6 @@ class HomeController extends Controller
 {
     public function home(){
         return view('Home.index')
-        ->with('pesan','Ini adalah halaman Home');
+        ->with('pesan','Ini adalah halaman awal website');
     }
 }

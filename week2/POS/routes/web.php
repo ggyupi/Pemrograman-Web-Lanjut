@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PenjualanController;
+use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,3 +23,11 @@ Route::get('/', function () {
 
 Route::get('/user/{id}/name/{name}', [UserController::class, 'user']);
 Route::get('/', [HomeController::class, 'home']);
+Route::get('/penjualan', [PenjualanController::class, 'penjualan']);
+
+Route::prefix('category')->group(function(){
+    Route::get('/food-beverage',[ProductsController::class, 'Food_Beverage']);
+    Route::get('/beauty-health',[ProductsController::class, 'Beauty_Health']);
+    Route::get('/home-care',[ProductsController::class, 'Home_Care']);
+    Route::get('/baby-kid',[ProductsController::class, 'Baby_Kid']);
+});
