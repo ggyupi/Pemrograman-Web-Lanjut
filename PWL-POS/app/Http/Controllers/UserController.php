@@ -107,8 +107,17 @@ class UserController extends Controller
         // dd($user->wasChanged(['nama', 'username'])); // true
 
         //JS 4- praktikum 2.6 – Create, Read, Update, Delete (CRUD)
-        $user = UserModel::all();
+        // $user = UserModel::all();
+        // return view('user', ['data' => $user]);
+        
+        //JS 4- praktikum 2.7 – Relationships
+        
+        // $user = UserModel::with('level')->get();
+        // dd($user);
+        
+        $user = UserModel::with('level')->get();
         return view('user', ['data' => $user]);
+
     }
         public function tambah()
     {
