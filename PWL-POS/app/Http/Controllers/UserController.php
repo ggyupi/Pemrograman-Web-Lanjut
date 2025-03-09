@@ -22,15 +22,22 @@ class UserController extends Controller
         // $data = UserModel::all(); //mengambil semua data dari tabel m_user
         // return view('user', ['data' => $data]); 
 
-        //JS 4
-        $data = [
-            'level_id' => 2,
-            'username' => 'manager_tiga',
-            'nama' => 'Manager 3',
-            'password' => Hash::make('12345')
-        ];
-        UserModel::create($data);
-        $user = UserModel::all(); 
+        //JS 4- praktikum 1
+        // $data = [
+        //     'level_id' => 2,
+        //     'username' => 'manager_tiga',
+        //     'nama' => 'Manager 3',
+        //     'password' => Hash::make('12345')
+        // ];
+        // UserModel::create($data);
+        // $user = UserModel::all(); 
+        // return view('user', ['data' => $user]);
+        
+        //JS 4- praktikum 2.1 – Retrieving Single Models
+        // $user = UserModel::firstWhere('level_id', 1);
+        $user = UserModel::findOrFail(20, ['username', 'nama'], function () {
+            abort(404);
+        });
         return view('user', ['data' => $user]);
     }
 }
