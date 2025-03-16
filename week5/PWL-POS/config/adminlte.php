@@ -327,6 +327,17 @@ return [
             'label' => 4,
             'label_color' => 'success',
         ],
+        [
+            'text' => 'Dashboard',
+            'url'  => 'home',
+            'icon' => 'fas fa-tachometer-alt',
+        ],
+        [
+            'text' => 'Kategori',
+            'url'  => 'kategori',
+            'icon' => 'fas fa-list',
+            'active' => ['kategori', 'kategori/*'],
+        ],
         ['header' => 'account_settings'],
         [
             'text' => 'profile',
