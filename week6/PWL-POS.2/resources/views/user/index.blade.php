@@ -49,6 +49,7 @@
                             <th class="border-top-0">Nama</th>
                             <th class="border-top-0">Level Pengguna</th>
                             <th class="border-top-0 text-center">Aksi</th>
+                            <th class="border-top-0 text-center">Ajax</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -109,6 +110,14 @@
                     }
                 }, {
                     data: "aksi",
+                    className: "text-center",
+                    orderable: false,
+                    searchable: false,
+                    render: function(data) {
+                        return data;
+                    }
+                }, {
+                    data: "AJAX",
                     className: "text-center",
                     orderable: false,
                     searchable: false,

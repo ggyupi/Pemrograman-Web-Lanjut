@@ -36,9 +36,13 @@ Route::prefix('user')->group(function () {
     Route::get('/create_ajax', [UserController::class,'create_ajax']);
     Route::post('/ajax', [UserController::class,'store_ajax']);
     Route::get('/show/{id}', [UserController::class,'show']);
-    Route::get('/edit/{id}', [UserController::class,'edit']);
-    Route::put('/update/{id}', [UserController::class,'update']);
-    Route::delete('/delete/{id}', [UserController::class,'delete']); 
+    // Route::get('/edit/{id}', [UserController::class,'edit']);
+    // Route::put('/update/{id}', [UserController::class,'update']);
+    Route::get('/{id}/edit_ajax', [UserController::class, 'edit_ajax']); // Menampilkan halaman form edit user Ajax
+    Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax']); // Menyimpan perubahan data user Ajax
+    // Route::delete('/delete/{id}', [UserController::class,'delete']); 
+    Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax']);
+    Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']);
 
 });
 Route::prefix('barang')->group(function () {
