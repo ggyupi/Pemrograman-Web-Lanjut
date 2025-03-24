@@ -32,6 +32,8 @@
                 <a href="{{ url('user/create') }}" class="btn btn-success btn-md animate__animated animate__fadeIn">
                     <i class="fas fa-plus-circle mr-1"></i> Tambah User Baru
                 </a>
+                <button onclick="modalAction('{{ url('/user/create_ajax') }}')"
+                    class="btn btn-sm btn-success mt-1">Tambah Ajax</button>
                 <div class="form-group has-search mb-0">
                     <span class="fa fa-search form-control-feedback"></span>
                     <input type="text" class="form-control" id="searchBox" placeholder="Cari pengguna...">
@@ -47,6 +49,7 @@
                             <th class="border-top-0">Nama</th>
                             <th class="border-top-0">Level Pengguna</th>
                             <th class="border-top-0 text-center">Aksi</th>
+                            <th class="border-top-0 text-center">Ajax</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -57,11 +60,18 @@
             </div>
         </div>
     </div>
+    <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data backdrop="static"
+        data-keyboard="false" data-width="75%" aria-hidden="true"></div>
 @endsection
 
 
 @push('js')
     <script>
+        function modalAction(url = '') {
+            $('#myModal').load(url, function() {
+                $('#myModal').modal('show');
+            });
+        }
         $(document).ready(function() {
             // Initialize DataTable
             var dataUser = $('#table_user').DataTable({
@@ -100,6 +110,14 @@
                     }
                 }, {
                     data: "aksi",
+                    className: "text-center",
+                    orderable: false,
+                    searchable: false,
+                    render: function(data) {
+                        return data;
+                    }
+                }, {
+                    data: "AJAX",
                     className: "text-center",
                     orderable: false,
                     searchable: false,
