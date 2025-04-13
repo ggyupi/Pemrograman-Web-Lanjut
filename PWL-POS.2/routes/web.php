@@ -44,7 +44,7 @@ Route::prefix('user')->group(function () {
     Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax']);
     Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax']);
     Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']);
-    Route::get('/show_ajax/{id}', [UserController::class, 'showAjax']);
+    Route::get('/{id}/show_ajax', [UserController::class, 'show_ajax']);
     
 
 });
@@ -65,6 +65,7 @@ Route::prefix('barang')->group(function () {
     Route::put('/{id}/update_ajax', [BarangController::class, 'update_ajax']);
     Route::get('/{id}/delete_ajax', [BarangController::class, 'confirm_ajax']);
     Route::delete('/{id}/delete_ajax', [BarangController::class, 'delete_ajax']);
+    Route::get('/{id}/show_ajax', [LevelController::class, 'show_ajax']);
 });
 Route::prefix('level')->group(function () {
     
@@ -83,7 +84,7 @@ Route::prefix('level')->group(function () {
     Route::put('/{id}/update_ajax', [LevelController::class, 'update_ajax']);
     Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax']);
     Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax']);
-    Route::get('/show_ajax/{id}', [LevelController::class, 'showAjax']);
+    Route::get('/{id}/show_ajax', [LevelController::class, 'show_ajax']);
 
 });
 Route::prefix('kategori')->group(function () {
@@ -102,7 +103,7 @@ Route::prefix('kategori')->group(function () {
     Route::put('/{id}/update_ajax', [KategoriController::class, 'update_ajax']);
     Route::get('/{id}/delete_ajax', [KategoriController::class, 'confirm_ajax']);
     Route::delete('/{id}/delete_ajax', [KategoriController::class, 'delete_ajax']);
-    Route::get('/show_ajax/{id}', [KategoriController::class, 'showAjax']);
+    Route::get('/{id}/show_ajax', [KategoriController::class, 'show_ajax']);
 });
 
 Route::prefix('supplier')->group(function () {
@@ -121,6 +122,7 @@ Route::prefix('supplier')->group(function () {
     Route::put('/{id}/update_ajax', [SupplierController::class, 'update_ajax']);
     Route::get('/{id}/delete_ajax', [SupplierController::class, 'confirm_ajax']);
     Route::delete('/{id}/delete_ajax', [SupplierController::class, 'delete_ajax']);
-    Route::get('/show_ajax/{id}', [SupplierController::class, 'showAjax']);
+    Route::get('/{id}/show_ajax', [SupplierController::class, 'show_ajax']);
 });
+
 Route::get('/welcome', [WelcomeController::class, 'index']);

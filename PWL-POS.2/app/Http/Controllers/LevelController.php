@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Level;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
-
+use App\Models\LevelModel;
 class LevelController extends Controller
 {
     public function index()
@@ -29,7 +29,8 @@ class LevelController extends Controller
         return DataTables::of($levels)
             ->addIndexColumn()
             ->addColumn('aksi', function ($level) {
-                $btn = '<a href="' . url('/level/edit/' . $level->level_id) . '" class="btn btn-warning btn-sm">Edit</a> ';
+                $btn = '<a href="' . url('/level/show/' . $level->level_id) . '" class="btn btn-info btn-sm">Detail</a> ';
+                $btn .= '<a href="' . url('/level/edit/' . $level->level_id) . '" class="btn btn-warning btn-sm">Edit</a> ';
                 $btn .= '<form class="d-inline-block" method="POST" action="' . url('/level/delete/' . $level->level_id) . '">' . csrf_field() . method_field('DELETE') .
                     '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakin menghapus data ini?\');">Hapus</button></form>';
                 return $btn;
@@ -43,17 +44,73 @@ class LevelController extends Controller
             ->rawColumns(['aksi', 'AJAX']) // memberitahu bahwa kolom aksi dan AJAX adalah html
             ->make(true);
     }
-
+    public function show($id)
+    {
+        $level = LevelModel::find($id);
+        $breadcrumb = [
+            'title' => 'Detail Level',
+            'list' => ['Home', 'Level', 'Detail']
+        ];
+        $page = (object)[
+            'title' => 'Detail Level'
+        ];
+        $activeMenu = 'level';
+        return view('level.show', compact('breadcrumb', 'page', 'activeMenu', 'level'));
+    }
+    public function show_ajax($id)
+    {
+        $level = Level::find($id);
+        return view('level.show_ajax', ['level' => $level]);
+    }
     public function create_ajax()
     {
         return view('level.create_ajax');
+    }
+    public function edit($id)
+    {
+        $level = LevelModel::find($id);
+        $breadcrumb = [
+            'title' => 'Edit Level',
+            'list' => ['Home', 'Level', 'Edit']
+        ];
+        $page = (object)[
+            'title' => 'Edit Level'
+        ];
+        $activeMenu = 'level';
+        return view('level.edit', compact('breadcrumb', 'page', 'activeMenu', 'level'));
+    }
+    public function create()
+    {
+        $breadcrumb = [
+            'title' => 'Tambah Level',
+            'list' => ['Home', 'Level', 'Tambah']
+        ];
+        $page = (object)[
+            'title' => 'Tambah Level Baru'
+        ];
+        $activeMenu = 'level';
+        return view('level.create', compact('breadcrumb', 'page', 'activeMenu'));
+    }
+    public function store(Request $request)
+    {
+        $request->validate([
+            'level_kode' => 'required|string|min:3|unique:m_level,level_kode|max:10',
+            'level_nama' => 'required|string|max:100',
+        ]);
+
+        LevelModel::create([
+            'level_kode' => $request->level_kode,
+            'level_nama' => $request->level_nama,
+        ]);
+
+        return redirect('/level')->with('success', 'Data user berhasil disimpan');
     }
 
     public function store_ajax(Request $request)
     {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'level_kode' => 'required|string|unique:levels,level_kode|max:10',
+                'level_kode' => 'required|string|unique:m_level,level_kode|max:10',
                 'level_nama' => 'required|string|max:100'
             ];
 
@@ -86,7 +143,7 @@ class LevelController extends Controller
     {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'level_kode' => 'required|string|unique:levels,level_kode,' . $id . ',level_id|max:10',
+                'level_kode' => 'required|string|unique:m_level,level_kode,' . $id . ',level_id|max:10',
                 'level_nama' => 'required|string|max:100'
             ];
 

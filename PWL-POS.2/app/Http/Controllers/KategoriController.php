@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Kategori;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
-
+use App\Models\KategoriModel;
 class KategoriController extends Controller
 {
     public function index()
@@ -29,7 +29,8 @@ class KategoriController extends Controller
         return DataTables::of($kategoris)
             ->addIndexColumn()
             ->addColumn('aksi', function ($kategori) {
-                $btn = '<a href="' . url('/kategori/edit/' . $kategori->kategori_id) . '" class="btn btn-warning btn-sm">Edit</a> ';
+                $btn = '<a href="' . url('/kategori/show/' . $kategori->kategori_id) . '" class="btn btn-info btn-sm">Detail</a> ';
+                $btn .= '<a href="' . url('/kategori/edit/' . $kategori->kategori_id) . '" class="btn btn-warning btn-sm">Edit</a> ';
                 $btn .= '<form class="d-inline-block" method="POST" action="' . url('/kategori/delete/' . $kategori->kategori_id) . '">' . csrf_field() . method_field('DELETE') .
                     '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakin menghapus data ini?\');">Hapus</button></form>';
                 return $btn;
@@ -46,31 +47,47 @@ class KategoriController extends Controller
 
     public function create()
     {
-        return view('kategori.create');
+        $breadcrumb = [
+            'title' => 'Tambah Kategori',
+            'list' => ['Home', 'Kategori', 'Tambah']
+        ];
+        $page = (object)[
+            'title' => 'Tambah Kategori Baru'
+        ];
+        $activeMenu = 'kategori';
+        return view('kategori.create', compact('breadcrumb', 'page', 'activeMenu'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'kategori_kode' => 'required|string|unique:kategoris,kategori_kode|max:10',
+            'kategori_kode' => 'required|string|unique:m_kategori,kategori_kode|max:10',
             'kategori_nama' => 'required|string|max:100'
         ]);
 
         Kategori::create($request->all());
 
-        return redirect()->route('kategori.index')->with('success', 'Kategori berhasil ditambahkan.');
+        return redirect('kategori')->with('success', 'Kategori berhasil ditambahkan.');
     }
 
     public function edit($id)
     {
-        $kategori = Kategori::findOrFail($id);
-        return view('kategori.edit', compact('kategori'));
+        $kategori = KategoriModel::find($id);
+        $breadcrumb = [
+            'title' => 'Edit Kategori',
+            'list' => ['Home', 'Kategori', 'Edit']
+        ];
+        $page = (object)[
+            'title' => 'Edit Kategori'
+        ];
+        $activeMenu = 'kategori';
+        return view('kategori.edit', compact('breadcrumb', 'page', 'activeMenu', 'kategori'));
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'kategori_kode' => 'required|string|unique:kategoris,kategori_kode,' . $id . ',kategori_id|max:10',
+            'kategori_kode' => 'required|string|unique:m_kategori,kategori_kode,' . $id . ',kategori_id|max:10',
             'kategori_nama' => 'required|string|max:100'
         ]);
 
@@ -90,6 +107,24 @@ class KategoriController extends Controller
             return redirect()->route('kategori.index')->with('error', 'Kategori tidak bisa dihapus.');
         }
     }
+    public function show($id)
+    {
+        $kategori = KategoriModel::find($id);
+        $breadcrumb = [
+            'title' => 'Detail Kategori',
+            'list' => ['Home', 'Kategori', 'Detail']
+        ];
+        $page = (object)[
+            'title' => 'Detail Kategori'
+        ];
+        $activeMenu = 'kategori';
+        return view('kategori.show', compact('breadcrumb', 'page', 'activeMenu', 'kategori'));
+    }
+    public function show_ajax(string $id)
+    {
+        $kategori = Kategori::find($id);
+        return view('kategori.show_ajax', ['kategori' => $kategori]);
+    }
 
     public function create_ajax()
     {
@@ -100,7 +135,7 @@ class KategoriController extends Controller
     {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'kategori_kode' => 'required|string|unique:kategoris,kategori_kode|max:10',
+                'kategori_kode' => 'required|string|unique:m_kategori,kategori_kode|max:10',
                 'kategori_nama' => 'required|string|max:100'
             ];
 
@@ -133,7 +168,7 @@ class KategoriController extends Controller
     {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'kategori_kode' => 'required|string|unique:kategoris,kategori_kode,' . $id . ',kategori_id|max:10',
+                'kategori_kode' => 'required|string|unique:m_kategori,kategori_kode,' . $id . ',kategori_id|max:10',
                 'kategori_nama' => 'required|string|max:100'
             ];
 

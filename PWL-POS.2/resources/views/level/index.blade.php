@@ -53,9 +53,10 @@
                 $('#myModal').modal('show');
             });
         }
+        var dataLevel
         $(document).ready(function() {
             // Initialize DataTable
-            var dataLevel = $('#table_level').DataTable({
+            dataLevel = $('#table_level').DataTable({
                 serverSide: true,
                 processing: true,
                 ajax: {
