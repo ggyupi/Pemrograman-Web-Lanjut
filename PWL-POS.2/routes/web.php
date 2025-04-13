@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\AuthController;
 
 
 
@@ -27,7 +28,9 @@ Route::get('/', [WelcomeController::class, 'index']);
 Route::get('/level', [LevelController::class, 'index']);
 Route::get('/kategori', [KategoriController::class, 'index']);
 
-
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', [WelcomeController::class, 'index']);
+Route::middleware(['authorize:ADM'])->group(function () {
 Route::prefix('user')->group(function () {
     Route::get('/', [UserController::class, 'index']);
     Route::get('/list', [UserController::class, 'list']);
@@ -48,6 +51,9 @@ Route::prefix('user')->group(function () {
     
 
 });
+});
+});
+Route::middleware(['authorize:ADM,MNG'])->group(function () {
 Route::prefix('barang')->group(function () {
     Route::get('/', [BarangController::class, 'index']);
     Route::get('/list', [BarangController::class, 'list']);
@@ -67,6 +73,10 @@ Route::prefix('barang')->group(function () {
     Route::delete('/{id}/delete_ajax', [BarangController::class, 'delete_ajax']);
     Route::get('/{id}/show_ajax', [LevelController::class, 'show_ajax']);
 });
+});
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', [WelcomeController::class, 'index']);
+Route::middleware(['authorize:ADM'])->group(function () {
 Route::prefix('level')->group(function () {
     
     Route::get('/', [LevelController::class, 'index']);
@@ -85,7 +95,8 @@ Route::prefix('level')->group(function () {
     Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax']);
     Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax']);
     Route::get('/{id}/show_ajax', [LevelController::class, 'show_ajax']);
-
+});
+});
 });
 Route::prefix('kategori')->group(function () {
     Route::get('/', [KategoriController::class, 'index']);
@@ -125,4 +136,16 @@ Route::prefix('supplier')->group(function () {
     Route::get('/{id}/show_ajax', [SupplierController::class, 'show_ajax']);
 });
 
-Route::get('/welcome', [WelcomeController::class, 'index']);
+Route::pattern('id', '[0-9]+'); // artinya ketika ada parameter {id}, maka harus berupa angka
+
+Route::get('login', [AuthController::class, 'login'])->name('login');
+Route::post('login', [AuthController::class, 'postLogin']);
+Route::get('register', [AuthController::class, 'register'])->name('register');
+Route::post('register', [AuthController::class, 'postregister']);
+Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
+
+Route::middleware(['auth'])->group(function () { // artinya semua route di dalam group ini harus login dulu
+    // masukkan semua route yang perlu autentikasi di sini
+});
+
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
